@@ -1,0 +1,26 @@
+<.header>
+  Tipo de entidade <%= @tipo_entidade.id %>
+  <:subtitle>This is a tipo_entidade record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/tipos_entidade/#{@tipo_entidade}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit Tipo de entidade</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Nome"><%= @tipo_entidade.nome %></:item>
+</.list>
+
+<.back navigate={~p"/tipos_entidade"}>Back to Tipos de entidade</.back>
+
+<.modal :if={@live_action == :edit} id="tipo_entidade-modal" show on_cancel={JS.patch(~p"/tipos_entidade/#{@tipo_entidade}")}>
+  <.live_component
+    module={ErpWeb.TipoEntidadeLive.FormComponent}
+    id={@tipo_entidade.id}
+    title={@page_title}
+    action={@live_action}
+    tipo_entidade={@tipo_entidade}
+    patch={~p"/tipos_entidade/#{@tipo_entidade}"}
+  />
+</.modal>

@@ -1,0 +1,32 @@
+<.header>
+  {@entidade.nome_razao_social}
+  <:subtitle>Detalhes da entidade.</:subtitle>
+  <:actions>
+    <.link patch={~p"/entidades/#{@entidade}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit entidade</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Nome razao social">{@entidade.nome_razao_social}</:item>
+  <:item title="Nome fantasia apelido">{@entidade.nome_fantasia_apelido}</:item>
+  <:item title="Email principal">{@entidade.email_principal}</:item>
+  <:item title="Telefone principal">{@entidade.telefone_principal}</:item>
+  <:item title="Data nascimento fundacao">{@entidade.data_nascimento_fundacao}</:item>
+  <:item title="Ativo">{@entidade.ativo}</:item>
+  <:item title="Observacoes">{@entidade.observacoes}</:item>
+</.list>
+
+<.back navigate={~p"/entidades"}>Back to entidades</.back>
+
+<.modal :if={@live_action == :edit} id="entidade-modal" show on_cancel={JS.patch(~p"/entidades/#{@entidade}")}>
+  <.live_component
+    module={ErpWeb.EntidadeLive.FormComponent}
+    id={@entidade.id}
+    title={@page_title}
+    action={@live_action}
+    entidade={@entidade}
+    patch={~p"/entidades/#{@entidade}"}
+  />
+</.modal>

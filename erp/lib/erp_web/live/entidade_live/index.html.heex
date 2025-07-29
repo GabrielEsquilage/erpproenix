@@ -1,0 +1,81 @@
+<.header>
+  Listando Entidades
+  <:actions>
+    <.link patch={~p"/entidades/new"}>
+      <.button>Nova Entidade</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<%# Formulário de Filtro %>
+<.form for={@filter_form} phx-change="filter" class="p-4">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+    <.input
+      field={@filter_form[:tipo_entidade_id]}
+      type="select"
+      label="Filtrar por Tipo"
+      prompt="Todos os Tipos"
+      options={Enum.map(@tipos_entidade, &{&1.nome, &1.id})}
+    />
+  </div>
+</.form>
+
+<!-- Container para os cards com a mesma ID da stream para atualizações do LiveView -->
+<div id="entidades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+  <div :for={entidade <- @entidades} id={"entidade-#{entidade.id}"} class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col justify-between">
+    <!-- Corpo do Card -->
+    <div class="p-6">
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">
+        <%= entidade.nome_razao_social %>
+      </h3>
+      <p class="text-sm text-gray-600 mb-4">
+        <%= entidade.nome_fantasia_apelido %>
+      </p>
+
+      <div class="space-y-2 text-sm">
+        <p class="flex items-center text-gray-700">
+          <.icon name="hero-envelope" class="h-4 w-4 mr-2 text-gray-400" />
+          <%= entidade.email_principal %>
+        </p>
+        <p class="flex items-center text-gray-700">
+          <.icon name="hero-phone" class="h-4 w-4 mr-2 text-gray-400" />
+          <%= entidade.telefone_principal %>
+        </p>
+        <%= if entidade.tipo_entidade do %>
+          <p class="flex items-center text-gray-700 font-medium">
+            <.icon name="hero-tag" class="h-4 w-4 mr-2 text-gray-400" />
+            Tipo: <%= entidade.tipo_entidade.nome %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Rodapé do Card com as Ações -->
+    <div class="bg-gray-50 px-6 py-3 flex items-center justify-end space-x-3">
+      <.link navigate={~p"/entidades/#{entidade}"} class="text-sm font-medium text-gray-600 hover:text-gray-900">
+        Ver
+      </.link>
+      <.link patch={~p"/entidades/#{entidade}/edit"} class="text-sm font-medium text-blue-600 hover:text-blue-800">
+        Editar
+      </.link>
+      <.link
+        phx-click={JS.push("delete", value: %{id: entidade.id})}
+        data-confirm="Tem certeza que deseja excluir?"
+        class="text-sm font-medium text-red-600 hover:text-red-800"
+      >
+        Excluir
+      </.link>
+    </div>
+  </div>
+</div>
+
+<.modal :if={@live_action in [:new, :edit]} id="entidade-modal" show on_cancel={JS.patch(~p"/entidades")}>
+  <.live_component
+    module={ErpWeb.EntidadeLive.FormComponent}
+    id={@entidade.id || :new}
+    title={@page_title}
+    action={@live_action}
+    entidade={@entidade}
+    patch={~p"/entidades"}
+  />
+</.modal>

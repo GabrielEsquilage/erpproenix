@@ -1,0 +1,41 @@
+<.header>
+  Listing Tipos de entidade
+  <:actions>
+    <.link patch={~p"/tipos_entidade/new"}>
+      <.button>New Tipo de entidade</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="tipos_entidade"
+  rows={@streams.tipos_entidade}
+  row_click={fn {_id, tipo_entidade} -> JS.navigate(~p"/tipos_entidade/#{tipo_entidade}") end}
+>
+  <:col :let={{_id, tipo_entidade}} label="Nome">{tipo_entidade.nome}</:col>
+  <:action :let={{_id, tipo_entidade}}>
+    <div class="sr-only">
+      <.link navigate={~p"/tipos_entidade/#{tipo_entidade}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tipos_entidade/#{tipo_entidade}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, tipo_entidade}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: tipo_entidade.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="tipo_entidade-modal" show on_cancel={JS.patch(~p"/tipos_entidade")}>
+  <.live_component
+    module={ErpWeb.TipoEntidadeLive.FormComponent}
+    id={@tipo_entidade.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tipo_entidade={@tipo_entidade}
+    patch={~p"/tipos_entidade"}
+  />
+</.modal>
