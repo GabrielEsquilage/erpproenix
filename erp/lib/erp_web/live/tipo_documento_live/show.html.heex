@@ -1,0 +1,27 @@
+<.header>
+  Tipo documento {@tipo_documento.id}
+  <:subtitle>This is a tipo_documento record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/tipo_documentos/#{@tipo_documento}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit tipo_documento</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Nome">{@tipo_documento.nome}</:item>
+  <:item title="Regex">{@tipo_documento.regex}</:item>
+</.list>
+
+<.back navigate={~p"/tipo_documentos"}>Back to tipo_documentos</.back>
+
+<.modal :if={@live_action == :edit} id="tipo_documento-modal" show on_cancel={JS.patch(~p"/tipo_documentos/#{@tipo_documento}")}>
+  <.live_component
+    module={ErpWeb.TipoDocumentoLive.FormComponent}
+    id={@tipo_documento.id}
+    title={@page_title}
+    action={@live_action}
+    tipo_documento={@tipo_documento}
+    patch={~p"/tipo_documentos/#{@tipo_documento}"}
+  />
+</.modal>

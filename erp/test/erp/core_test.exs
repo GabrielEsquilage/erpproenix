@@ -230,4 +230,60 @@ defmodule Erp.CoreTest do
       assert %Ecto.Changeset{} = Core.change_documento(documento)
     end
   end
+
+  describe "tipo_documentos" do
+    alias Erp.Core.TipoDocumento
+
+    import Erp.CoreFixtures
+
+    @invalid_attrs %{nome: nil, regex: nil}
+
+    test "list_tipo_documentos/0 returns all tipo_documentos" do
+      tipo_documento = tipo_documento_fixture()
+      assert Core.list_tipo_documentos() == [tipo_documento]
+    end
+
+    test "get_tipo_documento!/1 returns the tipo_documento with given id" do
+      tipo_documento = tipo_documento_fixture()
+      assert Core.get_tipo_documento!(tipo_documento.id) == tipo_documento
+    end
+
+    test "create_tipo_documento/1 with valid data creates a tipo_documento" do
+      valid_attrs = %{nome: "some nome", regex: "some regex"}
+
+      assert {:ok, %TipoDocumento{} = tipo_documento} = Core.create_tipo_documento(valid_attrs)
+      assert tipo_documento.nome == "some nome"
+      assert tipo_documento.regex == "some regex"
+    end
+
+    test "create_tipo_documento/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Core.create_tipo_documento(@invalid_attrs)
+    end
+
+    test "update_tipo_documento/2 with valid data updates the tipo_documento" do
+      tipo_documento = tipo_documento_fixture()
+      update_attrs = %{nome: "some updated nome", regex: "some updated regex"}
+
+      assert {:ok, %TipoDocumento{} = tipo_documento} = Core.update_tipo_documento(tipo_documento, update_attrs)
+      assert tipo_documento.nome == "some updated nome"
+      assert tipo_documento.regex == "some updated regex"
+    end
+
+    test "update_tipo_documento/2 with invalid data returns error changeset" do
+      tipo_documento = tipo_documento_fixture()
+      assert {:error, %Ecto.Changeset{}} = Core.update_tipo_documento(tipo_documento, @invalid_attrs)
+      assert tipo_documento == Core.get_tipo_documento!(tipo_documento.id)
+    end
+
+    test "delete_tipo_documento/1 deletes the tipo_documento" do
+      tipo_documento = tipo_documento_fixture()
+      assert {:ok, %TipoDocumento{}} = Core.delete_tipo_documento(tipo_documento)
+      assert_raise Ecto.NoResultsError, fn -> Core.get_tipo_documento!(tipo_documento.id) end
+    end
+
+    test "change_tipo_documento/1 returns a tipo_documento changeset" do
+      tipo_documento = tipo_documento_fixture()
+      assert %Ecto.Changeset{} = Core.change_tipo_documento(tipo_documento)
+    end
+  end
 end

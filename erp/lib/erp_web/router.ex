@@ -31,6 +31,12 @@ defmodule ErpWeb.Router do
 
     live("/tipos_entidade/:id", TipoEntidadeLive.Show, :index)
     live("/tipos_entidade/:id/show/edit", TipoEntidadeLive.Show, :edit)
+
+    live("/tipo_documentos", TipoDocumentoLive.Index, :index)
+    live("/tipo_documentos/new", TipoDocumentoLive.Index, :new)
+    live("/tipo_documentos/:id/edit", TipoDocumentoLive.Index, :edit)
+    live("/tipo_documentos/:id", TipoDocumentoLive.Show, :show)
+    live("/tipo_documentos/:id/show/edit", TipoDocumentoLive.Show, :edit)
   end
 
   # Other scopes may use custom stacks.

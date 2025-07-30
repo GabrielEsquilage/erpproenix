@@ -1,0 +1,42 @@
+<.header>
+  Listing Tipo documentos
+  <:actions>
+    <.link patch={~p"/tipo_documentos/new"}>
+      <.button>New Tipo documento</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="tipo_documentos"
+  rows={@streams.tipo_documentos}
+  row_click={fn {_id, tipo_documento} -> JS.navigate(~p"/tipo_documentos/#{tipo_documento}") end}
+>
+  <:col :let={{_id, tipo_documento}} label="Nome">{tipo_documento.nome}</:col>
+  <:col :let={{_id, tipo_documento}} label="Regex">{tipo_documento.regex}</:col>
+  <:action :let={{_id, tipo_documento}}>
+    <div class="sr-only">
+      <.link navigate={~p"/tipo_documentos/#{tipo_documento}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tipo_documentos/#{tipo_documento}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, tipo_documento}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: tipo_documento.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="tipo_documento-modal" show on_cancel={JS.patch(~p"/tipo_documentos")}>
+  <.live_component
+    module={ErpWeb.TipoDocumentoLive.FormComponent}
+    id={@tipo_documento.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tipo_documento={@tipo_documento}
+    patch={~p"/tipo_documentos"}
+  />
+</.modal>

@@ -80,4 +80,19 @@ defmodule Erp.CoreFixtures do
 
     documento
   end
+
+  @doc """
+  Generate a tipo_documento.
+  """
+  def tipo_documento_fixture(attrs \\ %{}) do
+    {:ok, tipo_documento} =
+      attrs
+      |> Enum.into(%{
+        nome: "some nome",
+        regex: "some regex"
+      })
+      |> Erp.Core.create_tipo_documento()
+
+    tipo_documento
+  end
 end

@@ -6,8 +6,6 @@ defmodule Erp.CadastroGeral.TipoDocumento do
     field(:nome, :string)
     field(:regex, :string)
 
-    has_many(:documentos, Erp.Core.Documento)
-
     timestamps(type: :utc_datetime)
   end
 
