@@ -10,6 +10,7 @@ defmodule Erp.Core do
   alias Erp.Core.TipoDocumento
   alias Erp.Core.Entidade
   alias Erp.Core.Documento
+  alias Erp.Core.TipoEntidadeDocumento
 
   # TIPOS ENTIDADE
 
@@ -146,5 +147,15 @@ defmodule Erp.Core do
 
   def change_documento(%Documento{} = documento, attrs \\ %{}) do
     Documento.changeset(documento, attrs)
+  end
+
+  def list_tipos_documento_por_tipo_entidade(tipo_entidade_id) do
+    from(ted in TipoEntidadeDocumento,
+      where: ted.tipo_entidade_id == ^tipo_entidade_id,
+      join: td in assoc(ted, :tipo_documento),
+      preload: [tipo_documento: td]
+    )
+    |> Repo.all()
+    |> Enum.map(& &1.tipo_documento)
   end
 end
