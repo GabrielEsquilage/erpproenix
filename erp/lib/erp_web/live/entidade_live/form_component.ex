@@ -70,6 +70,7 @@ defmodule ErpWeb.EntidadeLive.FormComponent do
      |> assign(assigns)
      |> assign(:tipos_entidade, tipos_entidade)
      |> assign(form: to_form(changeset), changeset: changeset)}
+    |> assign_new(:tipos_documento_requeridos, fn -> [] end)
   end
 
   @impl true
@@ -78,6 +79,20 @@ defmodule ErpWeb.EntidadeLive.FormComponent do
       Core.change_entidade(socket.assigns.entidade, entidade_params)
 
     {:noreply, assign(socket, form: to_form(changeset), changeset: changeset)}
+  end
+
+  @impl true
+  def handle_event("load_docs", %{"entidade" => %{"tipo_entidade_id" => tipo_id}}, socket) do
+    case Integer.parse(tipo_id) do
+      {tipo_entidade_id, _} ->
+        tipos_documento_requeridos =
+          Erp.Core.list_tipos_documento_por_tipo_entidade(tipo_entidade_id)
+
+        {:noreply, assign(socket, :tipos_documento_requeridos, tipos_documento_requeridos)}
+
+      :error ->
+        {:noreply, assign(socket, :tipos_documento_requeridos, [])}
+    end
   end
 
   def handle_event("save", %{"entidade" => entidade_params}, socket) do
