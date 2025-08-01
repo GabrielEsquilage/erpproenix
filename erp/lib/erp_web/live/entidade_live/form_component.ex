@@ -35,6 +35,8 @@ defmodule ErpWeb.EntidadeLive.FormComponent do
             label="Tipo de entidade"
             prompt="Escolha um tipo"
             options={Enum.map(@tipos_entidade, &{&1.nome, &1.id})}
+            phx-change="load_docs"
+            phx-target={@myself}
           />
 
           <%!-- Linha Completa --%>
